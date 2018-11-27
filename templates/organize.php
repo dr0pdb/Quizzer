@@ -4,13 +4,13 @@
     <div class="panel panel-default">
     <div class="panel-body">
 
-        <form class="form-horizontal" method="post" action="">
+        <form class="form-horizontal" method="post" enctype="multipart/form-data" action="">
             <fieldset>
                 <legend>Organize a Quiz</legend>
                 <div class="form-group">
                     <label for="inputName" class="col-lg-2 control-label">Title</label>
                     <div class="col-lg-10">
-                        <input type='text' class='form-control' name='quiz_name' value='<?=@$values["quiz_name"]?>' placeholder='<?=$defaults["quiz_name"]?>' >
+                        <input type='text' class='form-control' name='name' value='<?=@$values["name"]?>' placeholder='<?=$defaults["name"]?>' >
                     </div>
                 </div>
                 <div class="form-group">
@@ -20,15 +20,15 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="inputDuration" class="col-lg-2 control-label">Duration(HH:MM)</label>
+                    <label for="inputDuration" class="col-lg-2 control-label">Duration(Minutes)</label>
                     <div class="col-lg-10">
-                        <?php echo "<input type='time' class='form-control' name='duration_minutes' min='0:00' max='23:59' value='" . @$values["duration_minutes"] . "' placeholder='" . $defaults["duration_minutes"] . "' >" ?>
+                        <?php echo "<input type='number' class='form-control' name='duration_minutes' min='0' max='300' value='" . @$values["duration_minutes"] . "' placeholder='" . $defaults["duration_minutes"] . "' >" ?>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="inputDuration" class="col-lg-2 control-label">Questions(CSV)</label>
                     <div class="col-lg-5">
-                        <input type="file" name="questions" value="" />
+                        <input type="file" name="questions" id="questions" value="" />
                     </div>
                 </div>
                 <div class="form-group">

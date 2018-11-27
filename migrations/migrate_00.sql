@@ -3,12 +3,28 @@ DROP DATABASE IF EXISTS quizportal;
 CREATE DATABASE quizportal;
 USE quizportal;
 
+CREATE TABLE user
+(
+  _id INT PRIMARY KEY AUTO_INCREMENT,
+  first_name VARCHAR(50) NOT NULL,
+  last_name VARCHAR(50) NOT NULL,
+  email VARCHAR(50) NOT NULL,
+  username VARCHAR(30) NOT NULL,
+  password VARCHAR(255) NOT NULL,
+  ph_no VARCHAR(10),
+  gender ENUM('m', 'f', 'u') DEFAULT 'u',
+  join_time TIMESTAMP DEFAULT NOW(),
+  avatar VARCHAR(500) DEFAULT 'https://ssl.gstatic.com/images/branding/product/1x/avatar_circle_blue_512dp.png'
+);
+
 CREATE TABLE quiz
 (
   _id INT PRIMARY KEY AUTO_INCREMENT,
   name VARCHAR(100) NOT NULL UNIQUE,
   start_time TIMESTAMP NOT NULL,
-  duration_minutes INT NOT NULL
+  duration_minutes INT NOT NULL,
+  instructor_id INT NOT NULL,
+  CONSTRAINT quiz_user_id_fk FOREIGN KEY (instructor_id) REFERENCES user(_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE question
@@ -24,19 +40,15 @@ CREATE TABLE question
   CONSTRAINT question_quiz_id_fk FOREIGN KEY (quiz_id) REFERENCES quiz (_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-CREATE TABLE user
+CREATE TABLE quiz_participants
 (
   _id INT PRIMARY KEY AUTO_INCREMENT,
-  first_name VARCHAR(50) NOT NULL,
-  last_name VARCHAR(50) NOT NULL,
-  email VARCHAR(50) NOT NULL,
-  username VARCHAR(30) NOT NULL,
-  password VARCHAR(255) NOT NULL,
-  ph_no VARCHAR(10),
-  gender ENUM('m', 'f', 'u') DEFAULT 'u',
-  join_time TIMESTAMP DEFAULT NOW(),
-  avatar VARCHAR(500) DEFAULT 'https://ssl.gstatic.com/images/branding/product/1x/avatar_circle_blue_512dp.png'
+  quiz_id INT NOT NULL,
+  participant_id INT NOT NULL,
+  CONSTRAINT quiz_fk FOREIGN KEY (quiz_id) REFERENCES quiz(_id) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT participant_fk FOREIGN KEY (participant_id) REFERENCES user (_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
+
 
 CREATE UNIQUE INDEX user_email_uindex ON user (email);
 CREATE UNIQUE INDEX user_username_uindex ON user (username);

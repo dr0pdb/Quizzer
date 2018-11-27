@@ -54,8 +54,8 @@ class QuizService {
     }
 
     public static function getQuizzesForUser($id, $isStudent) {
-        $query = "SELECT * FROM quiz WHERE `_id` IN (SELECT quiz_id FROM student_quiz WHERE student_id = :id)";
-        if(!$isStudent) {
+        $query = "SELECT * FROM quiz WHERE `instructor_id` = :id";
+        if($isStudent) {
             $query = "SELECT * FROM quiz WHERE `_id` IN (SELECT quiz_id FROM instructor_quiz WHERE instructor_id = :id)";
         }
 
@@ -86,6 +86,7 @@ class QuizService {
         $fields = ['statement', 'option_one', 'option_two', 'option_three', 'option_four', 'answer', 'quiz_id'];
 
         $query = 'INSERT INTO question(' . implode(',', $fields) . ') VALUES(:' . implode(',:', $fields) . ')';
+        $db = Database::getInstance()->getDb();
         $stmt = $db->prepare($query);
 
         foreach ($questions as $question) {
@@ -101,7 +102,7 @@ class QuizService {
     }
 
     public static function insertQuiz($quizArray, $questions) {
-        $fields = ['name', 'start_time', 'duration_minutes'];
+        $fields = ['name', 'start_time', 'duration_minutes', 'instructor_id'];
 
         $query = 'INSERT INTO quiz(' . implode(',', $fields) . ') VALUES(:' . implode(',:', $fields) . ')';
 

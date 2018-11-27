@@ -18,7 +18,7 @@
                         <li><a href="/organize">Organize a Quiz</a></li>
                     <?php } ?>
                     <?php if($isStudent) { ?>
-                        <li><a href="/participate">Take a Quiz</a></li>
+                        <li><a href="/choose">Take a Quiz</a></li>
                     <?php } ?>
                 <?php } ?>
             </ul>

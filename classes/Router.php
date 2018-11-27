@@ -6,8 +6,9 @@ require_once("../classes/pages/Register.php");
 require_once("../classes/pages/Signin.php");
 require_once("../classes/pages/Logout.php");
 require_once("../classes/pages/Profile.php");
-require_once("../classes/pages/CarDetails.php");
+require_once("../classes/pages/QuizDetails.php");
 require_once("../classes/pages/Organize.php");
+require_once("../classes/pages/ChooseQuiz.php");
 require_once("../classes/pages/Quizzes.php");
 require_once("../classes/pages/NotFound.php");
 
@@ -53,6 +54,9 @@ class Router {
                 break;
             case "quizzes":
                 (new Quizzes())->render();
+                break;
+            case "choose":
+                (new ChooseQuiz())->render();
                 break;
             default:
                 (new NotFound())->render();
