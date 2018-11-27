@@ -1,12 +1,13 @@
 <?php
 
-class Organize extends BasicPage {
+class ChooseQuiz extends BasicPage {
 
     private $defaults = [
         'name' => 'Quiz Title',
         'start_time' => 'Start Date & Time',
         'duration_minutes' => 'Quiz Duration'
     ];
+    
     private $values = array();
 
     public function __construct() {
@@ -48,7 +49,7 @@ class Organize extends BasicPage {
     }
 
     public function render() {
-        $this->setTitle('Organize a Quiz');
+        $this->setTitle('Take a Quiz');
 
         $user = '';
 
@@ -76,7 +77,7 @@ class Organize extends BasicPage {
             }
         }
 
-        Renderer::render("organize.php", [
+        Renderer::render("choosequiz.php", [
             'user' => $user,
             'defaults' => $this->defaults,
             'values' => $this->values,
