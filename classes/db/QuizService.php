@@ -69,8 +69,20 @@ class QuizService {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public static function getRentals() {
-        $query = "SELECT transaction._id, cars.`_id` as car_id, mode, value, name, pic, rate_by_hour, rate_by_day, rate_by_km, first_name, last_name, date_format(time, '%D %b %Y, %I:%i %p') as time FROM transaction, cars, user, car_rates where transaction.car_id = cars.`_id` AND user.`_id` = transaction.user_id AND car_rates.car_id = cars.`_id`";
+    public static function getQuizzesForToday() {
+        $query = $query = "SELECT * FROM quiz WHERE DATE(start_time) = CURDATE()";
+
+        $stmt = Database::getInstance()
+            ->getDb()
+            ->prepare($query);
+
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public static function getQuizzesForFuture() {
+        $query = $query = "SELECT * FROM quiz WHERE DATE(start_time) > CURDATE()";
 
         $stmt = Database::getInstance()
             ->getDb()

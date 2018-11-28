@@ -12,12 +12,6 @@ class Quizzes extends BasicPage {
             $user = User::getUserInfo($this->getLoginInfo());
         }
 
-        if($_SERVER['REQUEST_METHOD'] == 'POST') {
-            if (isset($_POST['transaction_id']) && strlen($_POST['transaction_id']) != 0) {
-                RentalService::removeRental($_POST['transaction_id']);
-            }
-        }
-
         Renderer::render("quizzes.php", [
             'user' => $user,
             'quizzes' => QuizService::getQuizzesForUser($user_id, parent::isStudent())
