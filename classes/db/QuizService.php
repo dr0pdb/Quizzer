@@ -82,7 +82,7 @@ class QuizService {
     }
 
     public static function getQuizzesForFuture() {
-        $query = $query = "SELECT * FROM quiz WHERE DATE(start_time) > CURDATE()";
+        $query = "SELECT * FROM quiz WHERE DATE(start_time) > CURDATE()";
 
         $stmt = Database::getInstance()
             ->getDb()
