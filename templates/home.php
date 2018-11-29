@@ -25,24 +25,12 @@
 
 <div class="row">
     <?php foreach ($quizzes as $quiz) { ?>
-        <div class="col-md-3 text-center">
+        <div class="col-md-4 text-center">
             <div class="panel panel-default">
                 <div class="panel-body">
-                    <h4><?= $quiz['name'] ?></h4>
-                    <!-- <img src="<?= $car['pic'] ?>" class="img-responsive" style="height: 160px;"/>
-
-                    <?php
-                    $stock = $quiz['stock'];
-                    $color = getColor($stock);
-                    ?>
-
-                    <?= "<h5 class=\"text-$color\" >Stock : $stock </h5>"; ?>
-                    <a href="/car/<?= $car['_id'] ?>"><button class="btn btn-primary">Details</button></a>
-                    <?php if ($loginInfo != 0) { ?>
-                        <?php if ($stock == 0) $disable = "disabled"; else $disable = ""; ?>
-
-                        <a href="/rent/<?= $car['_id'] ?>" class="btn btn-<?=$color . " " . $disable?>" style="margin-left: 10px;">Rent</a>
-                    <?php } ?> -->
+                    <h3><?= $quiz['name'] ?></h3>
+                    <h5 class="text" >Start: <?= $quiz['start_time'] ?> </h5>
+                    <h5>Duration: <?= $quiz['duration_minutes']?> minutes</h5>
                 </div>
             </div>
         </div>

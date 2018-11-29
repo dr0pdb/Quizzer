@@ -132,7 +132,7 @@ class QuizService {
     }
 
     public static function insertParticipantAndResponses($participantArray, $responses) {
-        $fields = ['quiz_id', 'user_id'];
+        $fields = ['quiz_id', 'user_id', 'score'];
 
         $query = 'INSERT INTO quiz_participants(' . implode(',', $fields) . ') VALUES(:' . implode(',:', $fields) . ')';
 

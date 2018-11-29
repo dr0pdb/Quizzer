@@ -34,6 +34,4 @@
         </div>
     </div>
 
-    <?php if($admin) include_once('../templates/rental_item.php')?>
-
 <?php } ?>

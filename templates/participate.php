@@ -65,7 +65,7 @@
                         <br>
                         <div class="form-group">
                             <div class="col-lg-3 col-lg-offset-2">
-                                <button type="submit" class="btn btn-primary">Submit Answers</button>
+                                <button type="submit" class="btn btn-primary" id="submit_button">Submit Answers</button>
                             </div>
                         </div>
                     </fieldset>
@@ -109,12 +109,12 @@
 
       document.getElementById("time_left").innerHTML = "Time left: " + hours + "h " + minutes + "m " + seconds + "s ";
 
-      // If the count down is finished, write some text 
+      // If the count down is finished.
       if (distance < 0) {
         document.getElementById("time_left").innerHTML = "Time up!";
 
         // Automatically submit the responses.
-        
+        document.getElementById("submit_button").submit();
       }
     }, 1000);
 </script>

@@ -45,6 +45,7 @@ CREATE TABLE quiz_participant
   _id INT PRIMARY KEY AUTO_INCREMENT,
   quiz_id INT NOT NULL,
   user_id INT NOT NULL,
+  score DECIMAL(10,2) DEFAULT 0.0,
   CONSTRAINT quiz_fk FOREIGN KEY (quiz_id) REFERENCES quiz(_id) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT user_id_fk FOREIGN KEY (user_id) REFERENCES user (_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
@@ -55,7 +56,7 @@ create TABLE quiz_participant_response
   quiz_participant_id INT NOT NULL,
   question_number INT NOT NULL,
   response ENUM('A', 'B', 'C', 'D', 'E') NOT NULL,
-  CONSTRAINT quiz_participant_fk FOREIGN KEY (quiz_participant_id) REFERENCES quiz_participants (_id) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT quiz_participant_fk FOREIGN KEY (quiz_participant_id) REFERENCES quiz_participant(_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE UNIQUE INDEX user_email_uindex ON user (email);

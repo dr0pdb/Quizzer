@@ -1,13 +1,7 @@
 <?php if($loginInfo == 0) {
     include_once('../templates/logout.php');
 } else { ?>
-    <div class="panel panel-default">
-        <div class="panel-body">
-            <div class="col-lg-4">
-                <h4>Hello, <?=$user['first_name']?> </h4>
-            </div>
-        </div>
-    </div>
+    <legend>My Quizzes</legend>
     <?php if(!isset($quizzes) || count($quizzes) == 0) { ?>
         <div class="panel panel-default" style="background-color: #ff333b">
             <div class="panel-body text-center">
@@ -18,8 +12,20 @@
                 <?php } ?>
             </div>
         </div>
-    <?php } else {
-        include_once('../templates/quiz_item.php');
-    } ?>
+    <?php } else { ?>
+        <div class="row">
+            <?php foreach ($quizzes as $quiz) { ?>
+                <div class="col-md-4 text-center">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <h3><?= $quiz['name'] ?></h3>
+                            <h5 class="text" >Start: <?= $quiz['start_time'] ?> </h5>
+                            <h5>Duration: <?= $quiz['duration_minutes']?> minutes</h5>
+                        </div>
+                    </div>
+                </div>
+            <?php } ?>
+        </div>
+    <?php } ?>
 
 <?php } ?>

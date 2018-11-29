@@ -21,12 +21,16 @@ class Participate extends BasicPage {
         $success = "";
      
         if($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $participantArray = array('quiz_id' => $this->quiz_id, 'user_id' => $parent->getLoginInfo());
             $responses = array();
+            $score = 0.0;
 
             foreach ($_POST as $key => $value) {
                 $responses[] = array('question_number' => $key, 'response' => $value);
+                if ($questions[$key-1]['answer'] == $value) {
+                    $score += 1.0;
+                }
             }
+            $participantArray = array('quiz_id' => $this->quiz_id, 'user_id' => $parent->getLoginInfo(), 'score' => $score);
 
             $result = QuizService::insertParticipantAndResponses($participantArray, $responses);
 

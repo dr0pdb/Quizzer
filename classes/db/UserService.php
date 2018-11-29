@@ -66,7 +66,7 @@ class User {
     }
 
     public static function getUserDetails($id) {
-        $query = "SELECT *, date_format(join_time, '%D %b %Y, %I:%i %p') as join_date  FROM user, address WHERE user._id = :id AND user.address_id = address._id";
+        $query = "SELECT *, date_format(join_time, '%D %b %Y, %I:%i %p') as join_date  FROM user WHERE user._id = :id";
 
         $stmt = Database::getInstance()
             ->getDb()

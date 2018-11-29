@@ -9,6 +9,7 @@ require_once("../classes/pages/Profile.php");
 require_once("../classes/pages/Organize.php");
 require_once("../classes/pages/ChooseQuiz.php");
 require_once("../classes/pages/Quizzes.php");
+require_once("../classes/pages/QuizAnalytics.php");
 require_once("../classes/pages/NotFound.php");
 require_once("../classes/pages/Participate.php");
 
@@ -57,6 +58,9 @@ class Router {
                 break;
             case "choose":
                 (new ChooseQuiz())->render();
+                break;
+            case 'analytics':
+                (new QuizAnalytics($routes[2]))->render();
                 break;
             default:
                 (new NotFound())->render();
