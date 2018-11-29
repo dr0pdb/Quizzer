@@ -35,20 +35,28 @@ CREATE TABLE question
   option_two VARCHAR(400) NOT NULL,
   option_three VARCHAR(400) NOT NULL,
   option_four VARCHAR(400) NOT NULL,
-  answer ENUM('A', 'B', 'C', 'D') NOT NULL,
+  answer ENUM('A', 'B', 'C', 'D', 'E') NOT NULL,
   quiz_id INT NOT NULL,
   CONSTRAINT question_quiz_id_fk FOREIGN KEY (quiz_id) REFERENCES quiz (_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-CREATE TABLE quiz_participants
+CREATE TABLE quiz_participant
 (
   _id INT PRIMARY KEY AUTO_INCREMENT,
   quiz_id INT NOT NULL,
-  participant_id INT NOT NULL,
+  user_id INT NOT NULL,
   CONSTRAINT quiz_fk FOREIGN KEY (quiz_id) REFERENCES quiz(_id) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT participant_fk FOREIGN KEY (participant_id) REFERENCES user (_id) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT user_id_fk FOREIGN KEY (user_id) REFERENCES user (_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
+create TABLE quiz_participant_response
+(
+  _id INT PRIMARY KEY AUTO_INCREMENT,
+  quiz_participant_id INT NOT NULL,
+  question_number INT NOT NULL,
+  response ENUM('A', 'B', 'C', 'D', 'E') NOT NULL,
+  CONSTRAINT quiz_participant_fk FOREIGN KEY (quiz_participant_id) REFERENCES quiz_participants (_id) ON DELETE CASCADE ON UPDATE CASCADE
+);
 
 CREATE UNIQUE INDEX user_email_uindex ON user (email);
 CREATE UNIQUE INDEX user_username_uindex ON user (username);

@@ -28,8 +28,8 @@ class QuizService {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public static function getQuizDetails($id) {
-        $query = "SELECT *  FROM quiz, question WHERE _id = :id AND quiz_id = :id";
+    public static function getQuizQuestions($id) {
+        $query = "SELECT *  FROM question WHERE quiz_id = :id";
 
         $stmt = Database::getInstance()
             ->getDb()
@@ -38,7 +38,7 @@ class QuizService {
         $stmt->bindParam(":id", $id);
         $stmt->execute();
 
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public static function removeQuiz($id) {
@@ -111,6 +111,54 @@ class QuizService {
             $stmt->execute($prepared_array);
         }
 
+    }
+
+    private static function insertParticipantResponses($responses, $participant_id) {
+        $fields = ['quiz_participant_id', 'question_number', 'response'];
+
+        $query = 'INSERT INTO quiz_participant_response(' . implode(',', $fields) . ') VALUES(:' . implode(',:', $fields) . ')';
+        $db = Database::getInstance()->getDb();
+        $stmt = $db->prepare($query);
+
+        foreach ($responses as $response) {
+            $prepared_array = array();
+            $response['quiz_participant_id'] = $participant_id;
+            foreach ($fields as $field) {
+                $prepared_array[':'.$field] = @$response[$field];
+            }
+        
+            $stmt->execute($prepared_array);
+        }
+    }
+
+    public static function insertParticipantAndResponses($participantArray, $responses) {
+        $fields = ['quiz_id', 'user_id'];
+
+        $query = 'INSERT INTO quiz_participants(' . implode(',', $fields) . ') VALUES(:' . implode(',:', $fields) . ')';
+
+        $db = Database::getInstance()->getDb();
+        $stmt = $db->prepare($query);
+
+        $prepared_array = array();
+        foreach ($fields as $field) {
+            $prepared_array[':'.$field] = @$quizArray[$field];
+        }
+
+        try {
+            $db->beginTransaction();
+
+            $stmt->execute($prepared_array);
+
+            $id = $db->lastInsertId();
+            self::insertParticipantResponses($responses, $id);
+
+            $db->commit();
+        } catch (PDOException $ex) {
+            $db->rollBack();
+            return $ex->getMessage();
+        }
+
+        return $id;
     }
 
     public static function insertQuiz($quizArray, $questions) {

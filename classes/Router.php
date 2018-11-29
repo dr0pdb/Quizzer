@@ -6,11 +6,11 @@ require_once("../classes/pages/Register.php");
 require_once("../classes/pages/Signin.php");
 require_once("../classes/pages/Logout.php");
 require_once("../classes/pages/Profile.php");
-require_once("../classes/pages/QuizDetails.php");
 require_once("../classes/pages/Organize.php");
 require_once("../classes/pages/ChooseQuiz.php");
 require_once("../classes/pages/Quizzes.php");
 require_once("../classes/pages/NotFound.php");
+require_once("../classes/pages/Participate.php");
 
 class Router {
 
@@ -46,8 +46,8 @@ class Router {
             case "profile":
                 (new Profile())->render();
                 break;
-            case "car":
-                (new CarDetails($routes[2]))->render();
+            case "participate":
+                (new Participate($routes[2]))->render();
                 break;
             case "organize":
                 (new Organize())->render();
