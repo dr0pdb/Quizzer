@@ -1,10 +1,28 @@
 <?php if($loginInfo == 0) {
     include_once('../templates/logout.php');
 } else { ?>
+    <?php
+        if(isset($errors)) {
+            foreach ($errors as $error) {
+                echo "<div class=\"alert alert-dismissible alert-danger fade in\">\n" .
+                "<button type=\"button\" class=\"close\" data-dismiss=\"alert\">&times;</button>\n" .
+                "$error\n" .
+                "</div>\n";
+            }
+        }
+
+        if(isset($success) && strlen($success) > 0) {
+            echo "<div class=\"alert alert-dismissible alert-success fade in\">\n" .
+                "<button type=\"button\" class=\"close\" data-dismiss=\"alert\">&times;</button>\n" .
+                "$success\n" .
+            "</div>\n";
+        }
+    ?>
     <div class="panel panel-default"><br>
         <div class="panel-body">
             <div class="row text-center">
                <h3> <?php echo $quiz['name']; ?></h3>
+               <h3> <?php echo $nigger; ?> </h3>
             </div>
             <div class="col-lg-10 col-lg-offset-1">
                 <form class="form-horizontal" method="post" action="" id="answer">
@@ -74,23 +92,6 @@
         </div>
     </div>
     <br>
-    <?php
-        if(isset($errors)) {
-            foreach ($errors as $error) {
-                echo "<div class=\"alert alert-dismissible alert-danger fade in\">\n" .
-                "<button type=\"button\" class=\"close\" data-dismiss=\"alert\">&times;</button>\n" .
-                "$error\n" .
-                "</div>\n";
-            }
-        }
-
-        if(isset($success) && strlen($success) > 0) {
-            echo "<div class=\"alert alert-dismissible alert-success fade in\">\n" .
-                "<button type=\"button\" class=\"close\" data-dismiss=\"alert\">&times;</button>\n" .
-                "$success\n" .
-            "</div>\n";
-        }
-    ?>
 <?php } ?>
 <script type="text/javascript">
     var countDownDate = new Date("<?php echo $end_time ?>").getTime();

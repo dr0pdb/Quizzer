@@ -7,6 +7,7 @@ class Participate extends BasicPage {
     private $quiz;
     private $questions = array();
     private $participant = array();
+    private $nigger;
    
     public function __construct($id) {
         parent::__construct();
@@ -20,12 +21,12 @@ class Participate extends BasicPage {
         $this->end_time = date("Y-m-d H:i:s", $end_timestamp);
 
         $this->questions = QuizService::getQuizQuestions($this->quiz_id);
-        $this->participant_id = QuizService::getQuizParticipantId($this->getLoginInfo(), $this->quiz_id);
-        if($this->participant_id == 0) {
+        $this->participant= QuizService::getQuizParticipant($this->getLoginInfo(), $this->quiz_id);
+        if(!$this->participant) {
             $participantArray = array('quiz_id' => $this->quiz_id, 'user_id' => $this->getLoginInfo());
             $this->participant_id = QuizService::insertParticipant($participantArray);
 
-            $index=1;
+            $index=0;
             foreach ($this->questions as $question) {
                 $this->responses[$index]='E';
                 $index++;
@@ -34,6 +35,7 @@ class Participate extends BasicPage {
                 QuizService::insertParticipantResponse($response, $this->participant_id);
             }
         } else {
+            $this->participant_id = $this->participant['_id'];
             $saved_responses = QuizService::getParticipantResponses($this->participant_id);
             $index=1;
             foreach ($saved_responses as $saved_response) {
@@ -42,7 +44,7 @@ class Participate extends BasicPage {
             }
         }
 
-        $participant = QuizService::getQuizParticipant($this->participant_id);
+        $participant = QuizService::getQuizParticipantWithId($this->participant_id);
     }
 
     public function render() {
@@ -54,32 +56,31 @@ class Participate extends BasicPage {
         if($_SERVER['REQUEST_METHOD'] == 'POST') {
             if($this->participant['locked']) {
                 $errors[] = "You cannot edit your responses";
-                return;
-            }
+            } else {
+                $score=0;
+                foreach ($_POST as $key => $value) {
+                    if($key == 'auto') {
+                        continue;
+                    }
 
-            $score=0;
-            foreach ($_POST as $key => $value) {
-                if(isset($_POST['auto']) && $key == 'auto') {
-                    continue;
+                    $this->responses[$key]=$value;
+                    if ($this->questions[ord($key)-ord('0')-1]['answer'] == $value) {
+                        $score += 1.0;
+                    }
                 }
 
-                $this->responses[$key]=$value;
-                if ($this->questions[$key-1]['answer'] == $value) {
-                    $score += 1.0;
-                }
-            }
+                QuizService::updateParticipantScore($this->participant_id, $score);
+                QuizService::updateParticipantResponses($this->responses, $this->participant_id);
 
-            QuizService::updateParticipantScore($participant_id, $score);
-            QuizService::updateParticipantResponses($responses, $participant_id);
+                if(!isset($_POST['auto'])) {
+                    $result = QuizService::lockParticipantSubmissions($this->participant_id);
+                    $this->participant = QuizService::getQuizParticipantWithId($this->participant_id);
 
-            if(!isset($_POST['auto'])) {
-                $result = QuizService::lockParticipantSubmissions($participant_id);
-                $this->participant = QuizService::getParticipant($participant_id);
-
-                if(is_int($result) && $result != 0) {
-                    $success = "Successfully submitted";
-                } else if(is_int($result) && $result == 0) {
-                    $errors[] = "An Error Occurred!";
+                    if(is_int($result) && $result != 0) {
+                        $success = "Successfully submitted";
+                    } else if(is_int($result) && $result == 0) {
+                        $errors[] = "An Error Occurred!";
+                    }
                 }
             }
         }
@@ -90,7 +91,8 @@ class Participate extends BasicPage {
             'errors' => $errors,
             'success' => $success,
             'end_time' => $this->end_time,
-            'responses' => $this->responses
+            'responses' => $this->responses,
+            'nigger' => $this->nigger
         ]);
     }
 }

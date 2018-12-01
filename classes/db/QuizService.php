@@ -146,20 +146,20 @@ class QuizService {
         $index = 1;
 
         foreach ($responses as $response) {
-            $query = 'UPDATE quiz_participant_response SET response = :response WHERE quiz_participant_id = :quiz_participant_id AND question = :index';
+            $query = 'UPDATE quiz_participant_response SET response = :response WHERE quiz_participant_id = :quiz_participant_id AND question_number = :index';
             
             $stmt = $db->prepare($query);
-            $stmt->bindParam(":response", $response[$index]);
+            $stmt->bindParam(":response", $responses[$index]);
             $stmt->bindParam(":quiz_participant_id", $participant_id);
             $stmt->bindParam(":index", $index);
         
-            $stmt->execute($prepared_array);
+            $stmt->execute();
             $index++;
         }
     }
 
     public static function getParticipantResponses($id) {
-        $query = "SELECT * FROM quiz_participant_response WHERE `quiz_participant_id` = :id ";
+        $query = "SELECT * FROM quiz_participant_response WHERE quiz_participant_id = :id ";
 
         $stmt = Database::getInstance()
             ->getDb()
@@ -171,8 +171,8 @@ class QuizService {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public static function getQuizParticipantId($user_id, $quiz_id) {
-        $query = "SELECT _id  FROM quiz_participant WHERE user_id = :user_id AND quiz_id = :quiz_id ";
+    public static function getQuizParticipant($user_id, $quiz_id) {
+        $query = "SELECT *  FROM quiz_participant WHERE user_id = :user_id AND quiz_id = :quiz_id ";
 
         $stmt = Database::getInstance()
             ->getDb()
@@ -185,7 +185,7 @@ class QuizService {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public static function getQuizParticipant($id) {
+    public static function getQuizParticipantWithId($id) {
         $query = "SELECT *  FROM quiz_participant WHERE _id = :id ";
 
         $stmt = Database::getInstance()
@@ -199,22 +199,22 @@ class QuizService {
     }
 
     public static function insertParticipant($participantArray) {
-        $fields = ['quiz_id', 'user_id', 'score'];
+        $fields = ['quiz_id', 'user_id'];
 
-        $query = 'INSERT INTO quiz_participants(' . implode(',', $fields) . ') VALUES(:' . implode(',:', $fields) . ')';
+        $query = 'INSERT INTO quiz_participant(' . implode(',', $fields) . ') VALUES(:' . implode(',:', $fields) . ')';
 
         $db = Database::getInstance()->getDb();
         $stmt = $db->prepare($query);
 
         $prepared_array = array();
         foreach ($fields as $field) {
-            $prepared_array[':'.$field] = @$quizArray[$field];
+            $prepared_array[':'.$field] = @$participantArray[$field];
         }
 
         try {
             $db->beginTransaction();
 
-            $stmt->execute($prepared_array);
+            $stmt->execute();
             $id = $db->lastInsertId();
 
             $db->commit();
@@ -236,7 +236,7 @@ class QuizService {
         try {
             $db->beginTransaction();
 
-            $stmt->execute($prepared_array);
+            $stmt->execute();
 
             $db->commit();
         } catch (PDOException $ex) {
@@ -258,7 +258,7 @@ class QuizService {
         try {
             $db->beginTransaction();
 
-            $stmt->execute($prepared_array);
+            $stmt->execute();
 
             $db->commit();
         } catch (PDOException $ex) {
