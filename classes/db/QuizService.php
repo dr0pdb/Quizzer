@@ -56,7 +56,7 @@ class QuizService {
     public static function getQuizzesForUser($id, $isStudent) {
         $query = "SELECT * FROM quiz WHERE `instructor_id` = :id";
         if($isStudent) {
-            $query = "SELECT * FROM quiz JOIN quiz_participant ON quiz._id = quiz_participant.quiz_id WHERE user_id = :id AND quiz.end_time <= NOW()";
+            $query = "SELECT * FROM quiz JOIN quiz_participant ON quiz._id = quiz_participant.quiz_id WHERE user_id = :id AND (quiz.end_time <= NOW() OR quiz_participant.locked = 1)";
         }
 
         $stmt = Database::getInstance()

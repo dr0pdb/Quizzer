@@ -23,3 +23,8 @@ body {
 }
 
 .white-text { color: #FFFFE0; }
+
+.bg { 
+    height: 50%;
+    width: 100%;
+}

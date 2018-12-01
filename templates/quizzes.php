@@ -18,7 +18,7 @@
                 <?php if($isStudent != 0) { ?>
                     <?php if($quiz['share_ranklist'] == 'Y') { ?>
                         <a href="/analytics/<?=$quiz['_id']?>">
-                    <?php ?>
+                    <?php } ?>
                     <div class="col-md-4 text-center">
                         <div class="panel panel-default">
                             <div class="panel-body">
@@ -29,7 +29,7 @@
                     </div>
                     <?php if($quiz['share_ranklist'] == 'Y') { ?>
                         </a>
-                    <?php ?>
+                    <?php } ?>
                 <?php } else if($isInstructor != 0) { ?>
                     <a href="/analytics/<?=$quiz['_id']?>">
                         <div class="col-md-4 text-center">
@@ -46,5 +46,4 @@
             <?php } ?>
         </div>
     <?php } ?>
-
 <?php } ?>

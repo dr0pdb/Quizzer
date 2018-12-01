@@ -7,7 +7,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="../"><img src="/images/quizzer.png" height="50px" style="margin: -10px;" alt="Quizzer" /></a>
+            <a class="navbar-brand" href="../"><img src="/images/quiz.png" height="50px" style="margin: -10px;" alt="Quizzer" /></a>
         </div>
         <div class="collapse navbar-collapse" id="navbar-collapse">
             <ul class="nav navbar-nav">

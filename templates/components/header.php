@@ -11,7 +11,7 @@
     <meta name="msapplication-navbutton-color" content="#00BCD4">
 
     <meta name="apple-mobile-web-app-status-bar-style" content="#00BCD4">
-    <link rel="shortcut icon" href="/images/car-logo.png" />
+    <link rel="shortcut icon" href="/images/quiz.png" />
     <title><?= $title ?> - Quizzer</title>
 
     <link href="/styles/bootstrap.min.css" rel="stylesheet" />

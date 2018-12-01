@@ -31,13 +31,13 @@ class Participate extends BasicPage {
             $participantArray = array('quiz_id' => $this->quiz_id, 'user_id' => $this->getLoginInfo());
             $this->participant_id = QuizService::insertParticipant($participantArray);
 
-            $index=0;
+            $index=1;
             foreach ($this->questions as $question) {
                 $this->responses[$index]='E';
-                $index++;
 
                 $response = array('quiz_participant_id' => $this->participant_id, 'question_number' => $index, 'response' => 'E');
                 QuizService::insertParticipantResponse($response, $this->participant_id);
+                $index++;
             }
         } else {
             $this->participant_id = $this->participant['_id'];
