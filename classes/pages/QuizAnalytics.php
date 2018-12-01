@@ -19,8 +19,11 @@ class QuizAnalytics extends BasicPage {
             $user = User::getUserInfo($this->getLoginInfo());
         }
 
+        $score_card = QuizService::getQuizScoreCard($this->quiz_id);
+
         Renderer::render("quizanalytics.php", [
-            'quiz' => $quiz
+            'quiz' => $quiz,
+            'score_card' => $score_card,
         ]);
     }
 }

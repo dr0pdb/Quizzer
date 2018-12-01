@@ -5,7 +5,8 @@ class Organize extends BasicPage {
     private $defaults = [
         'name' => 'Quiz Title',
         'start_time' => 'Start Date & Time',
-        'duration_minutes' => 'Quiz Duration'
+        'duration_minutes' => 'Quiz Duration',
+        'negative_mark' => '0'
     ];
     private $values = array();
 

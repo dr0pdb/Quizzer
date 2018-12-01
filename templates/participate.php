@@ -1,6 +1,13 @@
 <?php if($loginInfo == 0) {
     include_once('../templates/logout.php');
-} else { ?>
+} else if ($too_early) { ?>
+    <?php
+        echo "<div class=\"alert alert-dismissible alert-danger fade in\">\n" .
+        "<button type=\"button\" class=\"close\" data-dismiss=\"alert\">&times;</button>\n" .
+        "The quiz hasn't been started yet!\n" .
+        "</div>\n";
+    ?>
+<?php } else { ?>
     <?php
         if(isset($errors)) {
             foreach ($errors as $error) {
@@ -22,7 +29,6 @@
         <div class="panel-body">
             <div class="row text-center">
                <h3> <?php echo $quiz['name']; ?></h3>
-               <h3> <?php echo $nigger; ?> </h3>
             </div>
             <div class="col-lg-10 col-lg-offset-1">
                 <form class="form-horizontal" method="post" action="" id="answer">
@@ -83,7 +89,7 @@
                         <br>
                         <div class="form-group">
                             <div class="col-lg-3 col-lg-offset-2">
-                                <button type="submit" class="btn btn-primary" id="submit_button">Submit Answers</button>
+                                <button type="submit" class="btn btn-primary" >Submit Answers</button>
                             </div>
                         </div>
                     </fieldset>
@@ -95,6 +101,7 @@
 <?php } ?>
 <script type="text/javascript">
     var countDownDate = new Date("<?php echo $end_time ?>").getTime();
+    var locked = <?php echo json_encode($locked); ?>;
 
     var x = setInterval(function() {
 
@@ -111,11 +118,11 @@
       document.getElementById("time_left").innerHTML = "Time left: " + hours + "h " + minutes + "m " + seconds + "s ";
 
       // If the count down is finished.
-      if (distance < 0) {
+      if (distance < 0 && !locked) {
         document.getElementById("time_left").innerHTML = "Time up!";
 
         // Automatically submit the responses.
-        // document.getElementById("submit_button").submit();
+        document.getElementById("answer").submit();
       }
     }, 1000);
 </script>

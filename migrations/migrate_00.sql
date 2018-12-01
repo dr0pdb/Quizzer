@@ -23,9 +23,16 @@ CREATE TABLE quiz
   name VARCHAR(100) NOT NULL UNIQUE,
   start_time TIMESTAMP NOT NULL,
   duration_minutes INT NOT NULL,
+  end_time TIMESTAMP NOT NULL,
   instructor_id INT NOT NULL,
+  share_ranklist ENUM('Y', 'N') DEFAULT 'N',
+  negative_mark DECIMAL(10,2) DEFAULT 0.0,
   CONSTRAINT quiz_user_id_fk FOREIGN KEY (instructor_id) REFERENCES user(_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
+
+CREATE TRIGGER set_quiz_end_time BEFORE INSERT ON quiz
+FOR EACH ROW
+  SET NEW.end_time = NEW.start_time + INTERVAL NEW.duration_minutes MINUTE;
 
 CREATE TABLE question
 (

@@ -7,7 +7,7 @@ class Participate extends BasicPage {
     private $quiz;
     private $questions = array();
     private $participant = array();
-    private $nigger;
+    private $too_early = false, $locked=false;
    
     public function __construct($id) {
         parent::__construct();
@@ -16,6 +16,11 @@ class Participate extends BasicPage {
 
     private function init() {
         $this->quiz = QuizService::getQuiz($this->quiz_id);
+        if($this->quiz['start_time'] > time()) {
+            $this->too_early = true;
+            return;
+        }
+
         $startDate = strtotime($this->quiz['start_time']);
         $end_timestamp = $startDate + (60 * $this->quiz['duration_minutes']);
         $this->end_time = date("Y-m-d H:i:s", $end_timestamp);
@@ -45,6 +50,7 @@ class Participate extends BasicPage {
         }
 
         $participant = QuizService::getQuizParticipantWithId($this->participant_id);
+        $this->locked = $participant['locked'];
     }
 
     public function render() {
@@ -52,47 +58,53 @@ class Participate extends BasicPage {
         $this->setTitle($this->quiz['name']);
         $errors = array();
         $success = "";
-     
-        if($_SERVER['REQUEST_METHOD'] == 'POST') {
-            if($this->participant['locked']) {
-                $errors[] = "You cannot edit your responses";
-            } else {
-                $score=0;
-                foreach ($_POST as $key => $value) {
-                    if($key == 'auto') {
-                        continue;
+        
+        if($this->too_early == false) {
+            if($_SERVER['REQUEST_METHOD'] == 'POST') {
+                if($this->participant['locked']) {
+                    $errors[] = "You cannot edit your responses";
+                } else {
+                    $score=0;
+                    foreach ($_POST as $key => $value) {
+                        if($key == 'auto') {
+                            continue;
+                        }
+
+                        $this->responses[$key]=$value;
+                        if ($this->questions[ord($key)-ord('0')-1]['answer'] == $value) {
+                            $score += 1.0;
+                        } else {
+                            $score -= $this->quiz['negative_mark'];
+                        }
                     }
 
-                    $this->responses[$key]=$value;
-                    if ($this->questions[ord($key)-ord('0')-1]['answer'] == $value) {
-                        $score += 1.0;
-                    }
-                }
+                    QuizService::updateParticipantScore($this->participant_id, $score);
+                    QuizService::updateParticipantResponses($this->responses, $this->participant_id);
 
-                QuizService::updateParticipantScore($this->participant_id, $score);
-                QuizService::updateParticipantResponses($this->responses, $this->participant_id);
+                    if(!isset($_POST['auto'])) {
+                        $result = QuizService::lockParticipantSubmissions($this->participant_id);
+                        $this->participant = QuizService::getQuizParticipantWithId($this->participant_id);
+                        $this->locked = $this->participant['locked'];
 
-                if(!isset($_POST['auto'])) {
-                    $result = QuizService::lockParticipantSubmissions($this->participant_id);
-                    $this->participant = QuizService::getQuizParticipantWithId($this->participant_id);
-
-                    if(is_int($result) && $result != 0) {
-                        $success = "Successfully submitted";
-                    } else if(is_int($result) && $result == 0) {
-                        $errors[] = "An Error Occurred!";
+                        if(is_int($result) && $result != 0) {
+                            $success = "Successfully submitted";
+                        } else if(is_int($result) && $result == 0) {
+                            $errors[] = "An Error Occurred!";
+                        }
                     }
                 }
             }
         }
 
         Renderer::render("participate.php", [
+            'too_early' => $this->too_early,
             'quiz' => $this->quiz,
             'questions' => $this->questions,
             'errors' => $errors,
             'success' => $success,
             'end_time' => $this->end_time,
             'responses' => $this->responses,
-            'nigger' => $this->nigger
+            'locked' => $this->locked
         ]);
     }
 }

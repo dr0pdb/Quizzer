@@ -4,7 +4,7 @@
     <?php if((isset($current_quizzes) && count($current_quizzes) != 0) || (isset($future_quizzes) && count($future_quizzes) != 0)) { ?>
         <?php if(isset($current_quizzes) && count($current_quizzes) != 0) { ?>
             <div class="row">
-                <h2 class="lead">Current quizzes</h2>    
+                <legend class="white-text">Quizzes Today</legend>    
             </div>
             <div class="row">
                 <?php foreach ($current_quizzes as $quiz) { ?>
@@ -22,7 +22,7 @@
         <?php } ?>
         <?php if(isset($future_quizzes) && count($future_quizzes) != 0) { ?>
             <div class="row">
-                <h2 class="lead">Future quizzes</h2>
+                <legend class="white-text">Future quizzes</legend>
             </div>
             <div class="row">
                 <?php foreach ($future_quizzes as $quiz) { ?>

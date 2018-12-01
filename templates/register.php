@@ -2,6 +2,24 @@
     <div class="panel-body">
         <?php if($loginInfo == 0) { ?>
 
+        <?php
+            if(isset($errors)) {
+                foreach ($errors as $error) {
+                    echo "<div class=\"alert alert-dismissible alert-danger fade in\">\n" .
+                    "<button type=\"button\" class=\"close\" data-dismiss=\"alert\">&times;</button>\n" .
+                    "$error\n" .
+                    "</div>\n";
+                }
+            }
+
+            if(isset($success) && strlen($success) > 0) {
+                echo "<div class=\"alert alert-dismissible alert-success fade in\">\n" .
+                    "<button type=\"button\" class=\"close\" data-dismiss=\"alert\">&times;</button>\n" .
+                    "$success\n" .
+                "</div>\n";
+            }
+        ?>
+
         <form class="form-horizontal" method="post" action="">
             <fieldset>
                 <legend>Register</legend>
@@ -99,23 +117,6 @@
             </fieldset>
         </form>
         <br>
-        <?php
-            if(isset($errors)) {
-                foreach ($errors as $error) {
-                    echo "<div class=\"alert alert-dismissible alert-danger fade in\">\n" .
-  					"<button type=\"button\" class=\"close\" data-dismiss=\"alert\">&times;</button>\n" .
-  					"$error\n" .
-				    "</div>\n";
-                }
-            }
-
-            if(isset($success) && strlen($success) > 0) {
-                echo "<div class=\"alert alert-dismissible alert-success fade in\">\n" .
-  					"<button type=\"button\" class=\"close\" data-dismiss=\"alert\">&times;</button>\n" .
-  					"$success\n" .
-				"</div>\n";
-            }
-        ?>
 
         <?php } else { ?>
         <h3 class="lead">You are logged in! Log out to register!</h3>

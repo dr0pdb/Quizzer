@@ -56,7 +56,7 @@ class QuizService {
     public static function getQuizzesForUser($id, $isStudent) {
         $query = "SELECT * FROM quiz WHERE `instructor_id` = :id";
         if($isStudent) {
-            $query = "SELECT * FROM quiz WHERE `_id` IN (SELECT quiz_id FROM instructor_quiz WHERE instructor_id = :id)";
+            $query = "SELECT * FROM quiz JOIN quiz_participant ON quiz._id = quiz_participant.quiz_id WHERE user_id = :id AND quiz.end_time <= NOW()";
         }
 
         $stmt = Database::getInstance()
@@ -214,7 +214,7 @@ class QuizService {
         try {
             $db->beginTransaction();
 
-            $stmt->execute();
+            $stmt->execute($prepared_array);
             $id = $db->lastInsertId();
 
             $db->commit();
@@ -297,6 +297,19 @@ class QuizService {
         }
 
         return $id;
+    }
+
+    public static function getQuizScoreCard($id) {
+        $query = "SELECT user.first_name AS first_name, user.last_name AS last_name, student.roll_number AS roll_number, quiz_participant.score AS score FROM user JOIN student ON user._id = student.user_id JOIN quiz_participant ON quiz_participant.user_id = user._id WHERE quiz_participant.quiz_id = :id ORDER BY quiz_participant.score DESC";
+
+        $stmt = Database::getInstance()
+            ->getDb()
+            ->prepare($query);
+
+        $stmt->bindParam(":id", $id);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
 }
