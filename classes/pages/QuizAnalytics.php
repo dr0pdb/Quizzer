@@ -20,6 +20,7 @@ class QuizAnalytics extends BasicPage {
         }
 
         $score_card = QuizService::getQuizScoreCard($this->quiz_id);
+        echo $quiz['share_ranklist'];
 
         Renderer::render("quizanalytics.php", [
             'quiz' => $quiz,

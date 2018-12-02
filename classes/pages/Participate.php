@@ -16,7 +16,9 @@ class Participate extends BasicPage {
 
     private function init() {
         $this->quiz = QuizService::getQuiz($this->quiz_id);
-        if($this->quiz['start_time'] > time()) {
+        date_default_timezone_set('Asia/Kolkata');
+        $now = new DateTime();
+        if(strtotime($this->quiz['start_time']) > $now->getTimestamp()) {
             $this->too_early = true;
             return;
         }

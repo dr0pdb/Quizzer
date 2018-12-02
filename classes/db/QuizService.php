@@ -56,7 +56,7 @@ class QuizService {
     public static function getQuizzesForUser($id, $isStudent) {
         $query = "SELECT * FROM quiz WHERE `instructor_id` = :id";
         if($isStudent) {
-            $query = "SELECT * FROM quiz JOIN quiz_participant ON quiz._id = quiz_participant.quiz_id WHERE user_id = :id AND (quiz.end_time <= NOW() OR quiz_participant.locked = 1)";
+            $query = "SELECT quiz._id AS _id, quiz.name as name, score, share_ranklist FROM quiz JOIN quiz_participant ON quiz._id = quiz_participant.quiz_id WHERE user_id = :id AND (quiz.end_time <= NOW() OR quiz_participant.locked = 1)";
         }
 
         $stmt = Database::getInstance()
@@ -270,7 +270,7 @@ class QuizService {
     }
 
     public static function insertQuiz($quizArray, $questions) {
-        $fields = ['name', 'start_time', 'duration_minutes', 'instructor_id'];
+        $fields = ['name', 'start_time', 'duration_minutes', 'instructor_id', 'share_ranklist'];
 
         $query = 'INSERT INTO quiz(' . implode(',', $fields) . ') VALUES(:' . implode(',:', $fields) . ')';
 

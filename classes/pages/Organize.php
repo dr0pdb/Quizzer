@@ -44,7 +44,7 @@ class Organize extends BasicPage {
         foreach($rows as $row) {
             $csv[] = array_combine($header, $row);
         }
-
+        unlink($questionsFile);
         return $csv;
     }
 
