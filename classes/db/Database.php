@@ -16,7 +16,7 @@ class Database {
     private function __construct() {
         try {
             $this->db = new PDO(
-                'mysql:host=localhost;dbname=quizportal;charset=utf8',
+                'mysql:host=localhost;dbname=de411rjfaehkc4;charset=utf8',
                 'quizportaladmin',
                 'password');
             $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
